@@ -16,4 +16,4 @@ class Schema:
         """
         self.db_uri = db_uri
         self.configuration = schema_config
-        self.sqlHandler
+        self.sqlHandler = sql_manager
