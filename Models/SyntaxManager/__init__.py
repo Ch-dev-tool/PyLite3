@@ -25,9 +25,22 @@ class CommandManager:
                     # manage the create providers :
                     if flag_sliter[0] == 'create' and flag_sliter[1] == 'DataBase':
                         # call provider static methos to manage task ;
-                        Provider.CreateDatabase(global_config['database_uri'])
-                        self.Printer.print(
-                            f"\t[bold blue] { flag_sliter[0] } => { flag_sliter[1] } => { global_config['database_uri']  } [/] \n")
+                        create_state = Provider.CreateDatabase(global_config['database_uri'])
+                        if create_state == True:
+                            self.Printer.print(
+                                f"\t[bold blue] { global_config['database_uri']  } => created  [/] \n")
+                    # manager create tabel providers:
+                    if flag_sliter[0] == 'create' and flag_sliter[1] == 'Table':
+                        # step 1 check syntax and the table name must be non null 
+                        try: 
+                            self.Printer.print(
+                                f"\t[bold blue] { command_arr[2]  } => created  [/] \n")
+                        except:
+                            raise Exception(
+                                'Table name is null '
+                                )
+                        # check if there is a model with the same name of the table:
+                        # 
                     return
                 else:
                     raise Exception(
