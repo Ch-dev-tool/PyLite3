@@ -34,14 +34,37 @@ class CommandManager:
                         # step 1 check syntax and the table name must be non null 
                         try: 
                             self.Printer.print(
-                                f"\t[bold blue] { command_arr[2]  } => created  [/] \n")
+                                f"\t [bold blue] check Modal { command_arr[2]  } ..  [/]")
                         except:
                             raise Exception(
                                 'Table name is null '
                                 )
                         # check if there is a model with the same name of the table:
-                        # 
-                    return
+                        modal_state = Provider.CheckModel(
+                            global_config['modals'], command_arr[2])
+                        if not modal_state:
+                            raise Exception(
+                                f'There is no Modal {command_arr[2] }  '
+                            )
+                    # manage make Modal provider :
+                    if flag_sliter[0] == 'make' and flag_sliter[1] == 'Modal':
+                        try:
+                            # check if there is a modal name as args :
+                            self.Printer.print(
+                                f"\n\t [bold blue] check Modal { command_arr[2]  } ..  [/]")
+                            response_state =Provider.MakeModal(global_config['path'],
+                            command_arr[2])
+                            # check response state if is equale to 299:
+                            if response_state:
+                                self.Printer.print(
+                                    f"\n\t [bold blue] { command_arr[2]  } Modal  created  [/]")
+                            else:
+                                self.Printer.print(
+                                    f"\n\t [bold red][error] ==> error create Modal <{ command_arr[2]  }>  [/]")
+                        except:
+                            raise Exception(
+                                'Modal name is null '
+                            )
                 else:
                     raise Exception(
                         f' { flag_sliter[1] } not supported by { flag_sliter[0]} ')
