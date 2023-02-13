@@ -28,9 +28,9 @@ class inputHandller:
             'path':self.project_path,
             'main':self.entry_script,
             'database_uri':'Database/my_db.sqlite',
-            'tables':[],
-            'modals':[],
-            'migrations':[]
+            'tables': json.dumps([]),
+            'modals': json.dumps([]),
+            'migrations': json.dumps([])
         }
         # create config folder :
         try:
