@@ -56,8 +56,14 @@ class CommandManager:
                             command_arr[2])
                             # check response state if is equale to 299:
                             if response_state:
+                                modal_name = command_arr[2]
                                 self.Printer.print(
-                                    f"\n\t [bold blue] { command_arr[2]  } Modal  created  [/]")
+                                    f"\n\t [bold blue] { modal_name  } Modal  created  [/]")
+                                # add new modal to the global config :
+                                message_add_modal = Provider.AppendModal(
+                                    global_config, modal_name)
+                                self.Printer.print(
+                                    f"\n\t [bold blue] { message_add_modal  }  [/]")
                             else:
                                 self.Printer.print(
                                     f"\n\t [bold red][error] ==> error create Modal <{ command_arr[2]  }>  [/]")
