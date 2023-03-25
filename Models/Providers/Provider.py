@@ -15,7 +15,7 @@ class Provider:
         except OSError as exc:
             if exc.errno == errno.EEXIST:
                 pass
-        # create new file as a data base : 
+        # create new file as a data base :
         with open(db_uri, "a+") as created_data_base:
             created_state = True
         return created_state
@@ -25,16 +25,18 @@ class Provider:
     @staticmethod
     def AppendModal(global_config={},modal_name=""):
         # create new migration
-        new_modals_list = global_config['modals']
-        new_migration_list.append(modal_name)
-        print(f"\n  { modal_name } { new_modals_list }")
+        new_modals_list = []
+        for modal_item in global_config['modals']:
+            if len(modal_item) > 1:
+                new_modals_list.append(modal_item)
+        new_modals_list.append(modal_name)
         migration = dict(
             name = f"Create New Table for modal : { modal_name }",
             state=False
         )
         new_migration_list = global_config['migrations']
         print(f"\n { migration } { new_migration_list }")
-        # update global config file : 
+        # update global config file :
         current_data = {
             'path': global_config['path'],
             'main': global_config['main'],
@@ -47,6 +49,13 @@ class Provider:
         with open("../../config/data_file.json", "w+") as write_file:
             json.dump(current_data, write_file)
         return f" config/data_file.json has been Updated -> New Modal created "
+
+
+    @staticmethod
+    def CheckModelFolder(project_uri="",modal_name=""):
+        #check if modal already saved :
+        return os.path.exists(project_uri+"Modals/"+str(modal_name))
+
     @staticmethod
     def MakeModal(project_uri="",modal_name=""):
         check_state = 404
@@ -54,22 +63,21 @@ class Provider:
         try:
             directory_modal  = project_uri+"/Modals"
             os.mkdir(directory_modal)
-            check_state -= 4 
-            # step 2 create file __init__.py to define folder as python pack 
+            # step 2 create file __init__.py to define folder as python pack
             with open(directory_modal+"/__init__.py", "w") as write_file:
-                check_state -= 100
+                pass
             directory_modal += '/'+str(modal_name)
             # step 3  create folder with the same name of the modal_name
             try:
                 os.mkdir(directory_modal)
-                check_state -= 100
-                # step 4 create __init__.py to define modal ad a python pack 
+                # step 4 create __init__.py to define modal ad a python pack
                 with open(directory_modal+"/__init__.py","w") as write_file:
-                    check_state += 99
+                    return True
             except OSError as exc:
                 if exc.errno == errno.EEXIST and os.path.isdir(directory_modal):
-                    pass
+                    print("\n :: Ignore # WARNING:  ")
+                    return False
         except OSError as exc:
             if exc.errno == errno.EEXIST and os.path.isdir(directory_modal):
-                pass
-        return check_state == 299
+                print("\n :: Ignore # WARNING:  ",errno)
+                return False
