@@ -1,11 +1,11 @@
 from rich.console import Console
 from Models.Providers.Provider import Provider
 class CommandManager:
-    # define the alowed commands : 
+    # define the alowed commands :
     def __init__(self):
         """
-        define all command and flags allowed : 
-        
+        define all command and flags allowed :
+
         """
         self.Allowed_command = {
             'make':['Modal','Migration'],
@@ -18,7 +18,7 @@ class CommandManager:
             # check the rest :
             # command must be a base-command:flag
             flag_sliter = command_arr[1].split(':')
-            # check if flag_spliter is a base command : 
+            # check if flag_spliter is a base command :
             if flag_sliter[0] in self.Allowed_command:
                 # check if the flag is allowed by the command base :
                 if flag_sliter[1] in self.Allowed_command[flag_sliter[0]]:
@@ -31,8 +31,8 @@ class CommandManager:
                                 f"\t[bold blue] { global_config['database_uri']  } => created  [/] \n")
                     # manager create tabel providers:
                     if flag_sliter[0] == 'create' and flag_sliter[1] == 'Table':
-                        # step 1 check syntax and the table name must be non null 
-                        try: 
+                        # step 1 check syntax and the table name must be non null
+                        try:
                             self.Printer.print(
                                 f"\t [bold blue] check Modal { command_arr[2]  } ..  [/]")
                         except:
@@ -52,24 +52,30 @@ class CommandManager:
                             # check if there is a modal name as args :
                             self.Printer.print(
                                 f"\n\t [bold blue] check Modal { command_arr[2]  } ..  [/]")
-                            response_state =Provider.MakeModal(global_config['path'],
-                            command_arr[2])
+                            response_state = Provider.MakeModal(
+                                                                global_config['path'],
+                                                                command_arr[2]
+                                                                )
                             # check response state if is equale to 299:
-                            if response_state:
+                            if response_state is True:
+                                print( response_state )
                                 modal_name = command_arr[2]
                                 self.Printer.print(
                                     f"\n\t [bold blue] { modal_name  } Modal  created  [/]")
                                 # add new modal to the global config :
                                 message_add_modal = Provider.AppendModal(
-                                    global_config, modal_name)
+                                                    global_config,
+                                                     modal_name
+                                                     )
                                 self.Printer.print(
                                     f"\n\t [bold blue] { message_add_modal  }  [/]")
                             else:
+                                print( response_state )
                                 self.Printer.print(
                                     f"\n\t [bold red][error] ==> error create Modal <{ command_arr[2]  }>  [/]")
-                        except:
+                        except Exception as e:
                             raise Exception(
-                                'Modal name is null '
+                                'Modal name is null '+str(e)
                             )
                 else:
                     raise Exception(
